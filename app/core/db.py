@@ -13,7 +13,7 @@ class PreBase:
     Расширение базового класса для всех моделей.
     """
     @declared_attr
-    def __tablename__(cls): # noqa
+    def __tablename__(cls) -> str: # noqa
         return cls.__name__.lower()
 
     id = Column(Integer, primary_key=True)
