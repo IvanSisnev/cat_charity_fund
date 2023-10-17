@@ -3,7 +3,7 @@
 """
 from sqlalchemy import Column, Integer, ForeignKey, Text
 
-from basemodel import AbstractBase
+from app.models.basemodel import AbstractBase
 
 
 class Donation(AbstractBase):  # noqa
