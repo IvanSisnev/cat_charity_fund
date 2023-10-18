@@ -1,7 +1,10 @@
 """
 Модель пользователя.
 """
-from app.models.basemodel import AbstractBase
+from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
 
-class User:
+from app.core.db import Base
+
+
+class User(SQLAlchemyBaseUserTable[int], Base): # noqa
     pass
