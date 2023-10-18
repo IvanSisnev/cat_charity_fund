@@ -7,7 +7,7 @@ from app.models.basemodel import AbstractBase
 
 
 class CharityProject(AbstractBase): # noqa
-    name = Column(String(100), nullable=False)
+    name = Column(String(100), unique=True, nullable=False)
     # todo 1 символ?
     description = Column(Text(1), nullable=False)
 
