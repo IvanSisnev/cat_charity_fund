@@ -65,3 +65,23 @@ async def charity_project_update(
                                                         obj_in,
                                                         session)
     return charity_project
+
+
+@router.delete(
+    '/{charity_project_id}',
+    response_model=CharityProjectRead,
+)
+async def charity_project_delete(
+        charity_project_id: int,
+        session: AsyncSession = Depends(get_async_session),
+):
+    """
+    Удаляет проект в БД.
+    """
+    charity_project = await check_charity_project_exists(
+        charity_project_id, session
+    )
+    charity_project = await charity_project_crud.remove(
+        charity_project, session
+    )
+    return charity_project
