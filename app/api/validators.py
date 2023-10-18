@@ -8,16 +8,18 @@ from app.crud.charityproject import charity_project_crud
 from app.models import CharityProject
 
 
-async def check_name_unique(
-        charity_project_name: str,
-        session: AsyncSession,
-) -> None:
-    charity_project_id = await meeting_room_crud.get_room_id_by_name(
-        room_name, session)
-    if room_id is not None:
+async def check_name_unique(charity_project_name: str,
+                            session: AsyncSession) -> None:
+    """
+    Проверяет название проекта на уникальность.
+    """
+    charity_project_id = await charity_project_crud.get_id_by_name(
+        charity_project_name, session
+    )
+    if charity_project_id:
         raise HTTPException(
             status_code=422,
-            detail='Переговорка с таким именем уже существует!',
+            detail='Проект с таким именем уже существует в базе.',
         )
 
 
