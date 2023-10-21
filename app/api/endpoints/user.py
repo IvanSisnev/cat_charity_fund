@@ -1,10 +1,13 @@
 """
 Настройка эндпоинтов для пользователя.
 """
+from http import HTTPStatus
+
 from fastapi import APIRouter, HTTPException
 
 from app.core.user import auth_backend, fastapi_users
 from app.schemas.user import UserCreate, UserRead, UserUpdate
+from app.core.error_messages import user_deletion_not_allowed
 
 router = APIRouter()
 
@@ -28,7 +31,6 @@ router.include_router(
 @router.delete('/users/{id}', tags=['users'], deprecated=True)
 def delete_user(id: str): # noqa
     raise HTTPException(
-        # todo статус коды HTTP
-        status_code=405,
-        detail="Удаление пользователей запрещено!"
+        status_code=HTTPStatus.METHOD_NOT_ALLOWED,
+        detail=user_deletion_not_allowed
     )

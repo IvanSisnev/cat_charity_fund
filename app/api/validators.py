@@ -1,15 +1,19 @@
 """
 Валидаторы приложения.
 """
+from http import HTTPStatus
+
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud.charity_project import charity_project_crud
 from app.models import CharityProject
-
-
-# todo HTTPStatus
-# todo сообщения в константы?
+from app.core.error_messages import (project_name_already_exists,
+                                     funded_project_deletion_not_allowed,
+                                     finished_project_no_editing,
+                                     full_vs_invested_controversy,
+                                     non_existing_project
+                                     )
 
 
 async def check_charity_project_name_unique(charity_project_name: str,
@@ -22,8 +26,8 @@ async def check_charity_project_name_unique(charity_project_name: str,
     )
     if charity_project_id is not None:
         raise HTTPException(
-            status_code=400,
-            detail='Проект с таким именем уже существует!',
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail=project_name_already_exists,
         )
 
 
@@ -40,8 +44,8 @@ async def check_charity_project_exists(
     )
     if not charity_project:
         raise HTTPException(
-            status_code=404,
-            detail='Такого проекта нет в базе.'
+            status_code=HTTPStatus.NOT_FOUND,
+            detail=non_existing_project
         )
     return charity_project
 
@@ -55,15 +59,15 @@ async def check_charity_project_full_amount(
     """
     if full_amount < invested_amount:
         raise HTTPException(
-            status_code=400,
-            detail='Требуемая сумма не может быть меньше внесенной.'
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail=full_vs_invested_controversy
         )
 
 
 async def check_charity_project_before_editing(
         charity_project_id: int,
         session: AsyncSession,
-        message='Закрытый проект нельзя редактировать!'
+        message=finished_project_no_editing
 ) -> CharityProject:
     """
     Проверить проект перед его изменением: проект существует и он не закрыт.
@@ -74,7 +78,7 @@ async def check_charity_project_before_editing(
 
     if charity_project.fully_invested:
         raise HTTPException(
-            status_code=400,
+            status_code=HTTPStatus.BAD_REQUEST,
             detail=message
         )
     return charity_project
@@ -90,12 +94,12 @@ async def check_charity_project_before_deleting(
     """
     charity_project = await check_charity_project_before_editing(
         charity_project_id, session,
-        message='В проект были внесены средства, не подлежит удалению!'
+        message=funded_project_deletion_not_allowed
     )
 
     if charity_project.invested_amount > 0:
         raise HTTPException(
-            status_code=400,
-            detail='В проект были внесены средства, не подлежит удалению!'
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail=funded_project_deletion_not_allowed
         )
     return charity_project
