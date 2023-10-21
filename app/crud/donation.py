@@ -16,7 +16,7 @@ class DonationProjectCRUD(BaseCRUD):
     """
     async def get_users_donations( # noqa
             self, user: User, session: AsyncSession
-                                  ) -> list[Optional[Donation]]:
+    ) -> list[Optional[Donation]]:
         """
         Получить из БД все пожертвования пользователя.
         """
