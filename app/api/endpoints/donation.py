@@ -17,8 +17,11 @@ from app.services.funds_allocation import allocate_funds
 router = APIRouter()
 
 
-@router.post('/', response_model=DonationGet,
-             response_model_exclude_none=True)
+@router.post('/',
+             response_model=DonationGet,
+             response_model_exclude_none=True,
+             summary='Внести пожертвование.'
+             )
 async def donation_create(donation: DonationCreateBase,
                           session: AsyncSession = Depends(get_async_session)):
     """
@@ -29,9 +32,13 @@ async def donation_create(donation: DonationCreateBase,
     return new_donation
 
 
-@router.get('/', response_model=list[DonationGetAll],
+@router.get('/',
+            response_model=list[DonationGetAll],
             response_model_exclude_none=True,
-            dependencies=[Depends(current_superuser)])
+            dependencies=[Depends(current_superuser)],
+            summary=('Получить список всех пожертвований. Только для '
+                     'суперпользователя.')
+            )
 async def donation_get_all(session: AsyncSession = Depends(get_async_session)):
     """
     Получить список всех пожертвований. Доступно только суперпользователю.
@@ -40,9 +47,13 @@ async def donation_get_all(session: AsyncSession = Depends(get_async_session)):
     return all_donations
 
 
-@router.get('/my', response_model=list[DonationGet],
+@router.get('/my',
+            response_model=list[DonationGet],
             response_model_exclude_none=True,
-            dependencies=[Depends(current_user)])
+            dependencies=[Depends(current_user)],
+            summary=('Получить список пожертвований пользователя. '
+                     'Пользователь может увидеть только свои пожертвования.')
+            )
 async def donation_get_all_by_user(
         session: AsyncSession = Depends(get_async_session),
         user: User = Depends(current_user)

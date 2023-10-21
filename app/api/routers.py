@@ -17,4 +17,4 @@ main_router.include_router(
     prefix='/donation',
     tags=['Пожертвования']
 )
-main_router.include_router(user_router)
+main_router.include_router(user_router, tags=['Пользователи'])

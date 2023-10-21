@@ -14,21 +14,25 @@ router = APIRouter()
 router.include_router(
     fastapi_users.get_auth_router(auth_backend),
     prefix='/auth/jwt',
-    tags=['auth'],
+    tags=['Авторизация'],
 )
 router.include_router(
     fastapi_users.get_register_router(UserRead, UserCreate),
     prefix='/auth',
-    tags=['auth'],
+    tags=['Авторизация'],
 )
 router.include_router(
     fastapi_users.get_users_router(UserRead, UserUpdate),
     prefix='/users',
-    tags=['users'],
+    tags=['Пользователи'],
 )
 
 
-@router.delete('/users/{id}', tags=['users'], deprecated=True)
+@router.delete(
+    '/users/{id}',
+    tags=['Пользователи'],
+    deprecated=True,
+)
 def delete_user(id: str): # noqa
     raise HTTPException(
         status_code=HTTPStatus.METHOD_NOT_ALLOWED,
