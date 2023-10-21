@@ -16,7 +16,8 @@ from app.models import User
 router = APIRouter()
 
 
-@router.post('/', response_model=DonationGet)
+@router.post('/', response_model=DonationGet,
+             response_model_exclude_none=True)
 async def donation_create(donation: DonationCreateBase,
                           session: AsyncSession = Depends(get_async_session)):
     """
