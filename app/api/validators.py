@@ -19,7 +19,7 @@ from app.core.error_messages import (project_name_already_exists,
 async def check_charity_project_name_unique(charity_project_name: str,
                                             session: AsyncSession) -> None:
     """
-    Проверяет название проекта на уникальность.
+    Проверить название проекта на уникальность.
     """
     charity_project_id = await charity_project_crud.get_id_by_name(
         charity_project_name, session
@@ -55,7 +55,7 @@ async def check_charity_project_full_amount(
         invested_amount: int
 ) -> None:
     """
-    Проверить, что требуемая сумма не меньше внесенной.
+    Проверить, что требуемая сумма не меньше уже внесенной.
     """
     if full_amount < invested_amount:
         raise HTTPException(

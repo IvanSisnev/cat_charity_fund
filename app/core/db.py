@@ -1,5 +1,5 @@
 """
-Настройка БД
+Настройка БД.
 """
 from sqlalchemy import Column, Integer
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine

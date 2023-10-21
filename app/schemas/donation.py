@@ -9,7 +9,7 @@ from pydantic import BaseModel, PositiveInt
 
 class DonationCreateBase(BaseModel):
     """
-    Создание пожертвования и базовый класс для других схем.
+    Создать пожертвование. Наследуемый базовый класс.
     """
     full_amount: PositiveInt
     comment: Optional[str] = None
@@ -17,7 +17,7 @@ class DonationCreateBase(BaseModel):
 
 class DonationGet(DonationCreateBase):
     """
-    Краткая информация о пожертвовании из БД.
+    Наследовать поля. Получить информацию о пожертвовании из БД.
     """
     id: int
     create_date: datetime
@@ -28,7 +28,7 @@ class DonationGet(DonationCreateBase):
 
 class DonationGetAll(DonationGet):
     """
-    Инфо о всех пожертвованиях пользователя.
+    Наследовать поля. Получить информацию о всех пожертвованиях пользователя.
     """
     user_id: int
     invested_amount: int

@@ -18,7 +18,7 @@ class DonationProjectCRUD(BaseCRUD):
             self, user: User, session: AsyncSession
                                   ) -> list[Optional[Donation]]:
         """
-        Получает из БД все пожертвования пользователя.
+        Получить из БД все пожертвования пользователя.
         """
         user_donations = await session.execute(
             select(Donation).where(Donation.user_id == user.id)

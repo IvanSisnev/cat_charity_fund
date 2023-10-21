@@ -1,5 +1,5 @@
 """
-Управление пожертвованными средствами.
+Управление средствами между проектами и пожертвованиями.
 """
 from datetime import datetime
 from typing import Type, Tuple
@@ -12,7 +12,8 @@ from app.models import BaseModel
 
 async def full_amount_closure(obj: BaseModel) -> BaseModel:
     """
-    Завершить проект или пожертвование.
+    Завершить проект или пожертвование при внесении в проект необходимой
+    суммы или распределении всей суммы пожертвования.
     """
     obj.invested_amount = obj.full_amount
     obj.fully_invested = True
@@ -24,13 +25,17 @@ async def allocate_funds(obj_in: BaseModel,
                          model: Type[BaseModel],
                          session: AsyncSession) -> BaseModel:
     """
-    Распределить средства внутри проектов и пожертвований.
+    Распределить средства между создаваемым или редактируемым проектом и
+    нераспределенными пожертвованиями или новым пожертвованием и
+    незавершенными проектами.
     """
+    # получить незавершенные проекты или пожертвования
     open_objs = await session.execute(select(model).where(
-        model.fully_invested is False).order_by(model.create_date)
+        model.fully_invested == False).order_by(model.create_date) # noqa
     )
     open_objs = open_objs.scalars().all()
     for open_obj in open_objs:
+        # распределить средства между проектами и пожертвованиями
         obj_in, open_obj = await invested_amount_calculation(obj_in, open_obj)
         session.add(obj_in)
         session.add(open_obj)

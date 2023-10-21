@@ -34,7 +34,7 @@ async def donation_create(donation: DonationCreateBase,
             dependencies=[Depends(current_superuser)])
 async def donation_get_all(session: AsyncSession = Depends(get_async_session)):
     """
-    Получить список всех пожертвований.
+    Получить список всех пожертвований. Доступно только суперпользователю.
     """
     all_donations = await donation_crud.get_many(session)
     return all_donations
@@ -48,7 +48,8 @@ async def donation_get_all_by_user(
         user: User = Depends(current_user)
 ):
     """
-    Получить список всех пожертвований пользователя.
+    Получить список всех пожертвований пользователя. Доступно только
+    текущему пользователю.
     """
     user_donations = await donation_crud.get_users_donations(user, session)
     return user_donations

@@ -8,13 +8,13 @@ from sqlalchemy import Column, Integer, Boolean, DateTime
 from app.core.db import Base
 
 
-class BaseModel(Base): # noqa
+class BaseModel(Base):
+    """
+    Описать общие поля для моделей проектов и пожертвований.
+    """
     __abstract__ = True
     full_amount = Column(Integer)
     invested_amount = Column(Integer, default=0)
     fully_invested = Column(Boolean, default=False)
     create_date = Column(DateTime, default=datetime.now)
     close_date = Column(DateTime)
-
-    def __repr__(self):
-        return f'{self.invested_amount} из {self.full_amount}.'

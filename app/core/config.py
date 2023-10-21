@@ -7,8 +7,7 @@ from pydantic import BaseSettings
 class Settings(BaseSettings): # noqa
     db_url: str = 'sqlite+aiosqlite:///./fastapi.db'
     app_title: str = 'QRKot'
-    app_description: str = ('Приложение для Благотворительного фонда '
-                            'поддержки котиков QRKot')
+    app_description: str = 'Приложение для Благотворительного фонда QRKot'
     secret: str = 'secret'
 
     class Config: # noqa

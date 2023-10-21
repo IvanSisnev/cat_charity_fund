@@ -31,7 +31,7 @@ async def charity_project_create(
         session: AsyncSession = Depends(get_async_session)
 ):
     """
-    Создать благотворительный проект.
+    Создать благотворительный проект. Доступно только суперпользователю.
     """
     await check_charity_project_name_unique(charity_project.name, session)
     new_project = await charity_project_crud.create(charity_project, session)
@@ -65,18 +65,24 @@ async def charity_project_update(
         session: AsyncSession = Depends(get_async_session),
 ):
     """
-    Изменить существующий проект.
+    Изменить существующий проект. Доступно только суперпользователю.
     """
+    # проверить имя на уникальность
     if obj_in.name:
         await check_charity_project_name_unique(obj_in.name, session)
+
+    # проверить, что проект существует и не закрыт
     charity_project = await check_charity_project_before_editing(
         charity_project_id,
         session
     )
+
+    # проверить, что требуемая сумма не меньше уже внесенной
     if obj_in.full_amount:
         await check_charity_project_full_amount(obj_in.full_amount,
                                                 charity_project.invested_amount
                                                 )
+
     charity_project = await charity_project_crud.update(charity_project,
                                                         obj_in,
                                                         session)
@@ -94,10 +100,12 @@ async def charity_project_delete(
         session: AsyncSession = Depends(get_async_session),
 ):
     """
-    Удалить проект из БД.
+    Удалить проект из БД. Доступно только суперпользователю.
     """
+    # проверить, что проект существует, не закрыт и средства в него не внесены
     charity_project = await check_charity_project_before_deleting(
         charity_project_id, session)
+
     charity_project = await charity_project_crud.remove(charity_project,
                                                         session)
     return charity_project

@@ -17,7 +17,7 @@ class CharityProjectCRUD(BaseCRUD):
     async def get_id_by_name(self, charity_project_name: str, # noqa
                              session: AsyncSession) -> Optional[int]:
         """
-        Ищет в БД проекты с таким же названием.
+        Найти в БД проекты с таким же названием.
         """
         charity_project_id = await session.execute(
             select(CharityProject.id).where(

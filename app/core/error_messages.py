@@ -1,3 +1,6 @@
+"""
+Сообщения об ошибках и исключениях.
+"""
 user_deletion_not_allowed = 'Удаление пользователей запрещено!'
 project_name_already_exists = 'Проект с таким именем уже существует!'
 funded_project_deletion_not_allowed = (
@@ -8,4 +11,3 @@ full_vs_invested_controversy = (
     'Требуемая сумма не может быть меньше внесенной.'
 )
 non_existing_project = 'Такого проекта нет в базе.'
-

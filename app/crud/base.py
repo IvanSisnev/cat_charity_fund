@@ -12,7 +12,7 @@ from app.models import User
 
 class BaseCRUD:
     """
-    Описывает базовые методы для операций с БД.
+    Описать базовые методы для операций с БД.
     """
     def __init__(self, model):
         self.model = model
@@ -23,7 +23,7 @@ class BaseCRUD:
             session: AsyncSession,
     ):
         """
-        Забирает объект модели из БД по его id.
+        Забрать объект модели из БД по его id.
         """
         db_obj = await session.execute(
             select(self.model).where(
@@ -37,7 +37,7 @@ class BaseCRUD:
             session: AsyncSession
     ):
         """
-        Забирает список всех объектов модели из БД.
+        Забрать список всех объектов модели из БД.
         """
         db_objs = await session.execute(select(self.model))
         return db_objs.scalars().all()
@@ -49,7 +49,7 @@ class BaseCRUD:
             user: Optional[User] = None
     ):
         """
-        Записывает объект модели в БД.
+        Записать объект модели в БД.
         """
         obj_in_data = obj_in.dict()
         if user:
@@ -67,7 +67,7 @@ class BaseCRUD:
             session: AsyncSession,
     ):
         """
-        Изменяет объект модели в БД.
+        Изменить объект модели в БД.
         """
         obj_data = jsonable_encoder(db_obj)
         update_data = obj_in.dict(exclude_unset=True)
@@ -86,7 +86,7 @@ class BaseCRUD:
             session: AsyncSession,
     ):
         """
-        Удаляет объект модели из БД.
+        Удалить объект модели из БД.
         """
         await session.delete(db_obj)
         await session.commit()

@@ -18,7 +18,7 @@ class CharityProjectBase(BaseModel):
 
 class CharityProjectCreate(CharityProjectBase):
     """
-    Создание проекта.
+    Создать проект.
     """
     name: str = Field(..., max_length=100)
     description: str
@@ -27,7 +27,7 @@ class CharityProjectCreate(CharityProjectBase):
 
 class CharityProjectUpdate(CharityProjectBase):
     """
-    Изменение проекта.
+    Изменить проекта.
     """
     name: Optional[str] = Field(None, max_length=100)
     description: Optional[str] = None
@@ -36,7 +36,7 @@ class CharityProjectUpdate(CharityProjectBase):
 
 class CharityProjectRead(CharityProjectCreate):
     """
-    Инфо о проекте из БД.
+    Получить информацию о проекте из БД.
     """
     id: int
     invested_amount: int
