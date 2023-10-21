@@ -11,10 +11,11 @@ from app.schemas.charity_project import (CharityProjectCreate,
                                          CharityProjectRead,
                                          CharityProjectUpdate)
 from app.api.validators import (check_charity_project_name_unique,
-                                check_charity_project_exists,
                                 check_charity_project_before_editing,
                                 check_charity_project_before_deleting,
                                 check_charity_project_full_amount)
+from app.services.funds_allocation import allocate_funds
+from app.models import Donation
 
 router = APIRouter()
 
@@ -34,6 +35,7 @@ async def charity_project_create(
     """
     await check_charity_project_name_unique(charity_project.name, session)
     new_project = await charity_project_crud.create(charity_project, session)
+    new_project = await allocate_funds(new_project, Donation, session)
     return new_project
 
 
@@ -67,20 +69,18 @@ async def charity_project_update(
     """
     if obj_in.name:
         await check_charity_project_name_unique(obj_in.name, session)
-
     charity_project = await check_charity_project_before_editing(
         charity_project_id,
         session
     )
-
     if obj_in.full_amount:
         await check_charity_project_full_amount(obj_in.full_amount,
                                                 charity_project.invested_amount
                                                 )
-
     charity_project = await charity_project_crud.update(charity_project,
                                                         obj_in,
                                                         session)
+    charity_project = await allocate_funds(charity_project, Donation, session)
     return charity_project
 
 
@@ -98,8 +98,6 @@ async def charity_project_delete(
     """
     charity_project = await check_charity_project_before_deleting(
         charity_project_id, session)
-
-    charity_project = await charity_project_crud.remove(
-        charity_project, session
-    )
+    charity_project = await charity_project_crud.remove(charity_project,
+                                                        session)
     return charity_project

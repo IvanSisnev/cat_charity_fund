@@ -10,7 +10,8 @@ from app.crud.donation import donation_crud
 from app.schemas.donation import (DonationCreateBase,
                                   DonationGet,
                                   DonationGetAll)
-from app.models import User
+from app.models import User, CharityProject
+from app.services.funds_allocation import allocate_funds
 
 
 router = APIRouter()
@@ -24,6 +25,7 @@ async def donation_create(donation: DonationCreateBase,
     Создать пожертвование.
     """
     new_donation = await donation_crud.create(donation, session)
+    new_donation = await allocate_funds(new_donation, CharityProject, session)
     return new_donation
 
 

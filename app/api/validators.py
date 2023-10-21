@@ -63,6 +63,7 @@ async def check_charity_project_full_amount(
 async def check_charity_project_before_editing(
         charity_project_id: int,
         session: AsyncSession,
+        message='Закрытый проект нельзя редактировать!'
 ) -> CharityProject:
     """
     Проверить проект перед его изменением: проект существует и он не закрыт.
@@ -74,7 +75,7 @@ async def check_charity_project_before_editing(
     if charity_project.fully_invested:
         raise HTTPException(
             status_code=400,
-            detail='Закрытый проект нельзя редактировать.'
+            detail=message
         )
     return charity_project
 
@@ -88,7 +89,8 @@ async def check_charity_project_before_deleting(
     него не внесены средства.
     """
     charity_project = await check_charity_project_before_editing(
-        charity_project_id, session
+        charity_project_id, session,
+        message='В проект были внесены средства, не подлежит удалению!'
     )
 
     if charity_project.invested_amount > 0:
