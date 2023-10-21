@@ -1,6 +1,7 @@
 """
 Точка входа приложения.
 """
+# todo названия и описания эндпоинтов в swagger
 from fastapi import FastAPI
 
 from app.core.config import settings

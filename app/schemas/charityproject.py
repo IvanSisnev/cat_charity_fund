@@ -1,5 +1,5 @@
 """
-Pydantic схема благотворительного проекта.
+Pydantic схемы модели CharityProject.
 """
 from datetime import datetime
 from typing import Optional
@@ -40,10 +40,10 @@ class CharityProjectRead(BaseModel):
     """
     name: str
     description: str
-    full_amount: int
+    full_amount: PositiveInt
     id: int
     invested_amount: int
-    fully_invested: int
+    fully_invested: bool
     create_date: datetime
     close_date: Optional[datetime]
 

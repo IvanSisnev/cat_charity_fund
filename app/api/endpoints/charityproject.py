@@ -23,7 +23,7 @@ async def charity_project_create(
         session: AsyncSession = Depends(get_async_session)
 ):
     """
-    Создает благотворительный проект.
+    Создать благотворительный проект.
     """
     await check_name_unique(charity_project.name, session)
     new_project = await charity_project_crud.create(charity_project, session)
@@ -38,7 +38,7 @@ async def charity_project_get_all(
         session: AsyncSession = Depends(get_async_session),
 ):
     """
-    Возвращает список всех благотворительных проектов.
+    Получить список всех благотворительных проектов.
     """
     all_projects = await charity_project_crud.get_many(session)
     return all_projects
@@ -54,7 +54,7 @@ async def charity_project_update(
         session: AsyncSession = Depends(get_async_session),
 ):
     """
-    Изменение существующего проекта.
+    Изменить существующий проект.
     """
     charity_project = await check_charity_project_exists(charity_project_id,
                                                          session)
@@ -76,7 +76,7 @@ async def charity_project_delete(
         session: AsyncSession = Depends(get_async_session),
 ):
     """
-    Удаляет проект в БД.
+    Удалить проект из БД.
     """
     charity_project = await check_charity_project_exists(
         charity_project_id, session

@@ -1,5 +1,5 @@
 """
-Pydantic схема пользователя.
+Pydantic схема модели User.
 """
 from fastapi_users import schemas
 

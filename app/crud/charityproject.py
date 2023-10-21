@@ -24,8 +24,7 @@ class CharityProjectCRUD(BaseCRUD):
                 CharityProject.name == charity_project_name
             )
         )
-        charity_project_id = charity_project_id.scalars().first()
-        return charity_project_id
+        return charity_project_id.scalars().first()
 
 
 charity_project_crud = CharityProjectCRUD(CharityProject)
