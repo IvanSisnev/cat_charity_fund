@@ -3,18 +3,17 @@
 """
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, Boolean, DateTime
+from sqlalchemy import Column, Integer, Boolean, DateTime, CheckConstraint
 
 from app.core.db import Base
 
 
 class AbstractBase(Base): # noqa
     __abstract__ = True
-    # todo
-    # __table_args__ = (
-    # CheckConstraint('full_amount >= invested_amount >= 0'),
-    # )
-    # todo ограничения здесь?
+    # todo нужно?
+    __table_args__ = (
+        CheckConstraint('full_amount >= invested_amount >= 0'),
+    )
     full_amount = Column(Integer)
     invested_amount = Column(Integer, default=0)
     fully_invested = Column(Boolean, default=False)

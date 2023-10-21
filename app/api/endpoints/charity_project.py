@@ -5,18 +5,25 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import get_async_session
-from app.crud.charityproject import charity_project_crud
-from app.schemas.charityproject import (CharityProjectCreate,
-                                        CharityProjectRead,
-                                        CharityProjectUpdate)
-from app.api.validators import (check_name_unique,
-                                check_charity_project_exists)
+from app.core.user import current_superuser
+from app.crud.charity_project import charity_project_crud
+from app.schemas.charity_project import (CharityProjectCreate,
+                                         CharityProjectRead,
+                                         CharityProjectUpdate)
+from app.api.validators import (check_charity_project_name_unique,
+                                check_charity_project_exists,
+                                check_charity_project_before_editing,
+                                check_charity_project_before_deleting,
+                                check_charity_project_full_amount)
 
 router = APIRouter()
 
 
 @router.post(
-    '/', response_model=CharityProjectRead,
+    '/',
+    response_model=CharityProjectRead,
+    response_model_exclude_none=True,
+    dependencies=[Depends(current_superuser)],
 )
 async def charity_project_create(
         charity_project: CharityProjectCreate,
@@ -25,7 +32,7 @@ async def charity_project_create(
     """
     Создать благотворительный проект.
     """
-    await check_name_unique(charity_project.name, session)
+    await check_charity_project_name_unique(charity_project.name, session)
     new_project = await charity_project_crud.create(charity_project, session)
     return new_project
 
@@ -33,6 +40,7 @@ async def charity_project_create(
 @router.get(
     '/',
     response_model=list[CharityProjectRead],
+    response_model_exclude_none=True
 )
 async def charity_project_get_all(
         session: AsyncSession = Depends(get_async_session),
@@ -47,6 +55,7 @@ async def charity_project_get_all(
 @router.patch(
     '/{charity_project_id}',
     response_model=CharityProjectRead,
+    dependencies=[Depends(current_superuser)]
 )
 async def charity_project_update(
         charity_project_id: int,
@@ -56,10 +65,18 @@ async def charity_project_update(
     """
     Изменить существующий проект.
     """
-    charity_project = await check_charity_project_exists(charity_project_id,
-                                                         session)
     if obj_in.name:
-        await check_name_unique(obj_in.name, session)
+        await check_charity_project_name_unique(obj_in.name, session)
+
+    charity_project = await check_charity_project_before_editing(
+        charity_project_id,
+        session
+    )
+
+    if obj_in.full_amount:
+        await check_charity_project_full_amount(obj_in.full_amount,
+                                                charity_project.invested_amount
+                                                )
 
     charity_project = await charity_project_crud.update(charity_project,
                                                         obj_in,
@@ -70,6 +87,7 @@ async def charity_project_update(
 @router.delete(
     '/{charity_project_id}',
     response_model=CharityProjectRead,
+    dependencies=[Depends(current_superuser)]
 )
 async def charity_project_delete(
         charity_project_id: int,
@@ -78,9 +96,9 @@ async def charity_project_delete(
     """
     Удалить проект из БД.
     """
-    charity_project = await check_charity_project_exists(
-        charity_project_id, session
-    )
+    charity_project = await check_charity_project_before_deleting(
+        charity_project_id, session)
+
     charity_project = await charity_project_crud.remove(
         charity_project, session
     )

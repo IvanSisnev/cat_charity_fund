@@ -34,13 +34,10 @@ class CharityProjectUpdate(CharityProjectBase):
     full_amount: Optional[PositiveInt]
 
 
-class CharityProjectRead(BaseModel):
+class CharityProjectRead(CharityProjectCreate):
     """
     Инфо о проекте из БД.
     """
-    name: str
-    description: str
-    full_amount: PositiveInt
     id: int
     invested_amount: int
     fully_invested: bool

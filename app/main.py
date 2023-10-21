@@ -2,6 +2,7 @@
 Точка входа приложения.
 """
 # todo названия и описания эндпоинтов в swagger
+# todo readme
 from fastapi import FastAPI
 
 from app.core.config import settings

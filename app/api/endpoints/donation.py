@@ -25,7 +25,7 @@ async def donation_create(donation: DonationCreateBase,
     new_donation = await donation_crud.create(donation, session)
     return new_donation
 
-# todo ошибка 401 Unauthorized
+
 @router.get('/', response_model=list[DonationGetAll],
             response_model_exclude_none=True,
             dependencies=[Depends(current_superuser)])
@@ -36,7 +36,7 @@ async def donation_get_all(session: AsyncSession = Depends(get_async_session)):
     all_donations = await donation_crud.get_many(session)
     return all_donations
 
-# todo ошибка 401 Unauthorized
+
 @router.get('/my', response_model=list[DonationGet],
             response_model_exclude_none=True,
             dependencies=[Depends(current_user)])
@@ -47,5 +47,5 @@ async def donation_get_all_by_user(
     """
     Получить список всех пожертвований пользователя.
     """
-    user_donations = await donation_crud.get_users_donations(session, user)
+    user_donations = await donation_crud.get_users_donations(user, session)
     return user_donations
