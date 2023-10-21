@@ -1,9 +1,13 @@
 """
 Базовый класс для операций с БД.
 """
+from typing import Optional
+
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.models import User
 
 
 class BaseCRUD:
@@ -42,18 +46,14 @@ class BaseCRUD:
             self,
             obj_in,
             session: AsyncSession,
-            # todo
-            # user: Optional[User] = None
+            user: Optional[User] = None
     ):
         """
         Записывает объект модели в БД.
         """
         obj_in_data = obj_in.dict()
-        # todo
-        # # Если пользователь был передан...
-        # if user is not None:
-        #     # ...то дополнить словарь для создания модели.
-        #     obj_in_data['user_id'] = user.id
+        if user:
+            obj_in_data['user_id'] = user.id
         db_obj = self.model(**obj_in_data)
         session.add(db_obj)
         await session.commit()

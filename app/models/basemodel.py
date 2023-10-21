@@ -7,8 +7,8 @@ from sqlalchemy import Column, Integer, Boolean, DateTime
 
 from app.core.db import Base
 
-# todo переименовать?
-class AbstractBase(Base): # noqa
+
+class BaseModel(Base): # noqa
     __abstract__ = True
     full_amount = Column(Integer)
     invested_amount = Column(Integer, default=0)

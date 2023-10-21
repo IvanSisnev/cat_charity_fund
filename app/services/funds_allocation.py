@@ -7,10 +7,10 @@ from typing import Type, Tuple
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models import AbstractBase
+from app.models import BaseModel
 
 
-async def full_amount_closure(obj: AbstractBase) -> AbstractBase:
+async def full_amount_closure(obj: BaseModel) -> BaseModel:
     """
     Завершить проект или пожертвование.
     """
@@ -20,9 +20,9 @@ async def full_amount_closure(obj: AbstractBase) -> AbstractBase:
     return obj
 
 
-async def allocate_funds(obj_in: AbstractBase,
-                         model: Type[AbstractBase],
-                         session: AsyncSession) -> AbstractBase:
+async def allocate_funds(obj_in: BaseModel,
+                         model: Type[BaseModel],
+                         session: AsyncSession) -> BaseModel:
     """
     Распределить средства внутри проектов и пожертвований.
     """
@@ -40,8 +40,8 @@ async def allocate_funds(obj_in: AbstractBase,
 
 
 async def invested_amount_calculation(
-        obj_in: AbstractBase,
-        open_obj: AbstractBase) -> Tuple[AbstractBase, AbstractBase]:
+        obj_in: BaseModel,
+        open_obj: BaseModel) -> Tuple[BaseModel, BaseModel]:
     """
     Сравнить вносимую сумму с требуемой, зачесть и по необходимости закрыть
     проект или пожертвование.

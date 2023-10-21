@@ -26,7 +26,6 @@ class DonationGet(DonationCreateBase):
         orm_mode = True
 
 
-# todo объединить со схемой проекта и сделать базовую схему
 class DonationGetAll(DonationGet):
     """
     Инфо о всех пожертвованиях пользователя.

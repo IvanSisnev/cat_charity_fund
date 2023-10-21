@@ -3,13 +3,12 @@
 """
 from sqlalchemy import Column, String, Text
 
-from app.models.basemodel import AbstractBase
+from app.models.basemodel import BaseModel
 
 
-class CharityProject(AbstractBase): # noqa
+class CharityProject(BaseModel): # noqa
     name = Column(String(100), unique=True, nullable=False)
-    # todo 1 символ?
-    description = Column(Text(1), nullable=False)
+    description = Column(Text, nullable=False)
 
     def __repr__(self):
         return f'Благотворительный проект. Внесено: {super().__repr__()}'

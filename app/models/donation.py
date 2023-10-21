@@ -3,10 +3,10 @@
 """
 from sqlalchemy import Column, Integer, ForeignKey, Text
 
-from app.models.basemodel import AbstractBase
+from app.models.basemodel import BaseModel
 
 
-class Donation(AbstractBase):  # noqa
+class Donation(BaseModel):  # noqa
     user_id = Column(Integer, ForeignKey('user.id'))
     comment = Column(Text, nullable=True)
 
