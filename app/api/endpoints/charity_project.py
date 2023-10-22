@@ -36,8 +36,7 @@ async def charity_project_create(
     """
     await check_charity_project_name_unique(charity_project.name, session)
     new_project = await charity_project_crud.create(charity_project, session)
-    new_project = await allocate_funds(new_project, Donation, session)
-    return new_project
+    return await allocate_funds(new_project, Donation, session)
 
 
 @router.get(
@@ -52,8 +51,7 @@ async def charity_project_get_all(
     """
     Получить список всех благотворительных проектов.
     """
-    all_projects = await charity_project_crud.get_many(session)
-    return all_projects
+    return await charity_project_crud.get_many(session)
 
 
 @router.patch(
@@ -89,8 +87,7 @@ async def charity_project_update(
     charity_project = await charity_project_crud.update(charity_project,
                                                         obj_in,
                                                         session)
-    charity_project = await allocate_funds(charity_project, Donation, session)
-    return charity_project
+    return await allocate_funds(charity_project, Donation, session)
 
 
 @router.delete(
@@ -110,6 +107,4 @@ async def charity_project_delete(
     charity_project = await check_charity_project_before_deleting(
         charity_project_id, session)
 
-    charity_project = await charity_project_crud.remove(charity_project,
-                                                        session)
-    return charity_project
+    return await charity_project_crud.remove(charity_project, session)
